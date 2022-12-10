@@ -1,5 +1,5 @@
 # rest-countries
-
+Live view: https://zesty-cactus-abde6e.netlify.app/
 ## Project setup
 ```
 npm install
