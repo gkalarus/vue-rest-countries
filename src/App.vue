@@ -6,7 +6,7 @@
         <v-text-field
           v-if="$route.name !== 'countryDetails'"
           :value="$store.state.search"
-          @input="SET_SEARCH($event)"
+          @input="handleChange"
           class="pa-3 shrink"
           outlined
           label="Search country..."
@@ -26,11 +26,15 @@
 
 <script>
 import { mapMutations } from "vuex";
-import { SET_SEARCH } from "@/utils/consts";
+import { SET_SEARCH, RESET_CURRENT_PAGE } from "@/utils/consts";
 export default {
   name: "App",
   methods: {
-    ...mapMutations([SET_SEARCH]),
+    ...mapMutations([SET_SEARCH, RESET_CURRENT_PAGE]),
+    handleChange($event) {
+      this.RESET_CURRENT_PAGE();
+      this.SET_SEARCH($event);
+    },
   },
 };
 </script>

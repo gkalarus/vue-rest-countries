@@ -9,6 +9,8 @@ import {
   GET_COUNTRY_DETAILS,
   COUNTRIES_FILTERED,
   SET_SEARCH,
+  VISIBLE_PAGES,
+  RESET_CURRENT_PAGE,
 } from "@/utils/consts";
 
 Vue.use(Vuex);
@@ -23,6 +25,8 @@ export default new Vuex.Store({
     countries: [],
     search: null,
     isLoading: true,
+    currentPage: 1,
+    perPage: 24,
   },
   getters: {
     [GET_COUNTRY_DETAILS]: (state) => (countryCode) => {
@@ -41,6 +45,18 @@ export default new Vuex.Store({
           .includes(state.search.toLowerCase());
       });
     },
+    [VISIBLE_PAGES]: (state, getters) => {
+      if (!state.search) {
+        return state.countries.slice(
+          (state.currentPage - 1) * state.perPage,
+          state.currentPage * state.perPage
+        );
+      }
+      return getters[COUNTRIES_FILTERED].slice(
+        (state.currentPage - 1) * state.perPage,
+        state.currentPage * state.perPage
+      );
+    },
   },
   mutations: {
     [RECEIVE_COUNTRIES](state, countries) {
@@ -49,6 +65,9 @@ export default new Vuex.Store({
     },
     [SET_SEARCH](state, value) {
       state.search = value ? value.trim() : value;
+    },
+    [RESET_CURRENT_PAGE](state) {
+      state.currentPage = 1;
     },
   },
   actions: {

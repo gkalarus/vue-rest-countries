@@ -1,15 +1,22 @@
 <template>
   <div class="pt-10">
-    <list-of-countries :items="COUNTRIES_FILTERED" />
+    <list-of-countries :items="rendersItems" />
+    <div class="text-center">
+      <v-pagination
+        v-if="paginationLength > 1"
+        v-model="$store.state.currentPage"
+        :length="paginationLength"
+      ></v-pagination>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import {
-  FETCH_COUNTRIES,
   COUNTRIES_FILTERED,
-  SET_SEARCH,
+  FETCH_COUNTRIES,
+  VISIBLE_PAGES,
 } from "@/utils/consts";
 export default {
   name: "CountriesView",
@@ -18,10 +25,17 @@ export default {
   },
   methods: {
     ...mapActions([FETCH_COUNTRIES]),
-    ...mapMutations([SET_SEARCH]),
   },
   computed: {
-    ...mapGetters([COUNTRIES_FILTERED]),
+    ...mapGetters([VISIBLE_PAGES, COUNTRIES_FILTERED]),
+    paginationLength() {
+      return Math.ceil(
+        this.COUNTRIES_FILTERED.length / this.$store.state.perPage
+      );
+    },
+    rendersItems() {
+      return this.VISIBLE_PAGES;
+    },
   },
   async mounted() {
     await this.FETCH_COUNTRIES();
