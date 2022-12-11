@@ -10,7 +10,7 @@
       </v-col>
     </v-row>
     <v-row v-else>
-      <v-col v-for="item in 24" :key="`${item}`" class="d-flex justify-center">
+      <v-col v-for="item in 16" :key="`${item}`" class="d-flex justify-center">
         <skeleton-loader />
       </v-col>
     </v-row>

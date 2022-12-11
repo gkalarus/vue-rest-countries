@@ -26,7 +26,7 @@ export default new Vuex.Store({
     search: null,
     isLoading: true,
     currentPage: 1,
-    perPage: 24,
+    perPage: 12,
   },
   getters: {
     [GET_COUNTRY_DETAILS]: (state) => (countryCode) => {

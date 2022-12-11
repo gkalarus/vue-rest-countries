@@ -6,6 +6,8 @@
         v-if="paginationLength > 1"
         v-model="$store.state.currentPage"
         :length="paginationLength"
+        :total-visible="5"
+        class="py-8"
       ></v-pagination>
     </div>
   </div>
