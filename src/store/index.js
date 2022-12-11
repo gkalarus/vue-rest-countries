@@ -11,6 +11,7 @@ import {
   SET_SEARCH,
   VISIBLE_PAGES,
   RESET_CURRENT_PAGE,
+  SET_REGION,
 } from "@/utils/consts";
 
 Vue.use(Vuex);
@@ -27,6 +28,7 @@ export default new Vuex.Store({
     isLoading: true,
     currentPage: 1,
     perPage: 12,
+    selectedRegion: "",
   },
   getters: {
     [GET_COUNTRY_DETAILS]: (state) => (countryCode) => {
@@ -35,23 +37,49 @@ export default new Vuex.Store({
       });
     },
     [COUNTRIES_FILTERED]: (state) => {
-      if (!state.search) {
+      if (
+        !state.search &&
+        (state.selectedRegion === "" || state.selectedRegion === "All")
+      ) {
         return state.countries;
+      } else if (
+        !state.search &&
+        !(state.selectedRegion === "" || state.selectedRegion === "All")
+      ) {
+        return state.countries.filter(
+          (country) => country.region === state.selectedRegion
+        );
+      } else if (
+        state.search &&
+        !(state.selectedRegion === "" || state.selectedRegion === "All")
+      ) {
+        return state.countries.filter(
+          (country) =>
+            country.name.common
+              .toLowerCase()
+              .includes(state.search.toLowerCase()) &&
+            country.region === state.selectedRegion
+        );
+      } else if (
+        state.search &&
+        (state.selectedRegion === "" || state.selectedRegion === "All")
+      ) {
+        return state.countries.filter((country) =>
+          country.name.common.toLowerCase().includes(state.search.toLowerCase())
+        );
       }
-
-      return state.countries.filter((country) => {
-        return country.name.common
-          .toLowerCase()
-          .includes(state.search.toLowerCase());
-      });
     },
     [VISIBLE_PAGES]: (state, getters) => {
-      if (!state.search) {
+      if (
+        !state.search &&
+        (state.selectedRegion === "" || state.selectedRegion === "All")
+      ) {
         return state.countries.slice(
           (state.currentPage - 1) * state.perPage,
           state.currentPage * state.perPage
         );
       }
+
       return getters[COUNTRIES_FILTERED].slice(
         (state.currentPage - 1) * state.perPage,
         state.currentPage * state.perPage
@@ -68,6 +96,9 @@ export default new Vuex.Store({
     },
     [RESET_CURRENT_PAGE](state) {
       state.currentPage = 1;
+    },
+    [SET_REGION](state, region) {
+      state.selectedRegion = region;
     },
   },
   actions: {
