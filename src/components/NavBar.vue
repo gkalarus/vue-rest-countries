@@ -4,7 +4,7 @@
       class="d-flex align-center justify-space-between flex-column flex-sm-row"
     >
       <search-bar />
-      <drop-down />
+      <drop-down v-if="$route.name !== 'countryDetails'" />
     </v-container>
   </v-app-bar>
 </template>
@@ -17,11 +17,18 @@ export default {
   },
   computed: {
     height() {
-      switch (this.$vuetify.breakpoint.name) {
-        case "xs":
-          return 180;
-        default:
-          return 64;
+      if (
+        this.$vuetify.breakpoint.name === "xs" &&
+        this.$route.name !== "countryDetails"
+      ) {
+        return 180;
+      } else if (
+        this.$vuetify.breakpoint.name !== "xs" &&
+        this.$route.name !== "countryDetails"
+      ) {
+        return 64;
+      } else {
+        return 64;
       }
     },
   },
