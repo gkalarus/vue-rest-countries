@@ -1,4 +1,4 @@
-# 'Find a country' App
+# find-a-country App (Vue 2, Options Api)
 
 An application which integrates [REST Countries API](https://restcountries.com/) to pull country data and display it. With this application, the user can perform the following actions:
 
